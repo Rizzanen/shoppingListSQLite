@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as SQLite from "expo-sqlite";
+import { Header, Icon, Input, Button, ListItem } from "@rneui/themed";
 
 export default function App() {
   const [listItems, setListItems] = useState([]);
@@ -77,83 +78,71 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <TextInput
-        style={{
-          marginTop: "10%",
-          borderWidth: 2,
-          borderColor: "black",
-          width: "60%",
-          height: 40,
-          fontSize: 18,
+      <Header
+        centerComponent={{
+          text: "SHOPPING LIST",
+          style: {
+            color: "white",
+            marginTop: "20%",
+            fontWeight: 700,
+            fontSize: 20,
+          },
         }}
+      />
+      <Input
+        label="Product"
         placeholder="Product"
         value={product}
         onChangeText={(text) => {
           handleProductInputChange(text);
         }}
       />
-      <TextInput
-        style={{
-          marginTop: "2%",
-          borderWidth: 2,
-          borderColor: "black",
-          width: "60%",
-          height: 40,
-          fontSize: 18,
-        }}
+      <Input
+        label="Amount"
         placeholder="Amount"
         value={amount}
         onChangeText={(text) => {
           handleAmountInputChange(text);
         }}
       />
-      <Pressable
-        style={{
-          backgroundColor: "blue",
-          padding: 10,
-          marginTop: 10,
-        }}
-        onPress={save}
-      >
-        <Text style={{ color: "white" }}>Save</Text>
-      </Pressable>
+      <Button raised icon={{ name: "save" }} onPress={save} title="SAVE" />
       <View
         style={{
           flex: 1,
           marginTop: 30,
+          width: "100%",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
         <Text style={{ fontSize: 25 }}>Shopping List</Text>
         <FlatList
           data={listItems}
           renderItem={({ item }) => (
-            <View
-              style={{
-                flexDirection: "row",
-                marginTop: 10,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Text>{item.product + " " + item.amount} </Text>
-              <Pressable
-                style={{ backgroundColor: "green", padding: 5 }}
-                onPress={() => deleteItem(item.id)}
+            <ListItem bottomDivider>
+              <ListItem.Content
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                <Text
-                  style={{
-                    color: "white",
-                  }}
-                >
-                  Bought
-                </Text>
-              </Pressable>
-            </View>
+                <View>
+                  <ListItem.Title>{item.product}</ListItem.Title>
+                  <ListItem.Subtitle>{item.amount}</ListItem.Subtitle>
+                </View>
+                <View>
+                  <Button
+                    icon={{ name: "delete", color: "red" }}
+                    onPress={() => deleteItem(item.id)}
+                    buttonStyle={{ backgroundColor: "transparent" }}
+                  />
+                </View>
+              </ListItem.Content>
+            </ListItem>
           )}
           keyExtractor={(item, index) => index.toString()}
-          style={{
-            maxHeight: 300,
-          }}
+          style={{ width: "100%" }}
         />
       </View>
     </View>
